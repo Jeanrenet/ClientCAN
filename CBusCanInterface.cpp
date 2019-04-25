@@ -1,4 +1,4 @@
-#include "CBusCanInterface.h"
+﻿#include "CBusCanInterface.h"
 #include <QDataStream>
 
 CBusCanInterface::CBusCanInterface()
@@ -49,7 +49,10 @@ void CBusCanInterface::setLedRed(bool value)
 
 void CBusCanInterface::swithStreamingMode()
 {
-    writeToCAN(StreamingMode, true);
+    QCanBusFrame frame;
+    frame.setFrameId(0);
+    frame.setFrameType(QCanBusFrame::RemoteRequestFrame);
+    sendFrame(frame);
 }
 
 bool CBusCanInterface::init(const QString &a_pluginType, const QString &a_interface)
@@ -74,7 +77,8 @@ bool CBusCanInterface::init(const QString &a_pluginType, const QString &a_interf
     }
     else
     {
-        mp_canDevice->connectDevice();
+        mp_canDevice->setConfigurationParameter(QCanBusDevice::BitRateKey, 250000);
+        mp_canDevice->connectDevice();        
 
         //connexion des différents signaux provenant de la classe instanciée
         connect(mp_canDevice, &QCanBusDevice::errorOccurred, this, &CBusCanInterface::errorOccurred);
@@ -96,6 +100,7 @@ void CBusCanInterface::errorOccurred(QCanBusDevice::CanBusError error)
     case QCanBusDevice::ConfigurationError:
     case QCanBusDevice::UnknownError:
         qDebug()<< __FUNCTION__ << "Une erreur est apparue : "<< mp_canDevice->errorString();
+        mp_canDevice->clear();
         break;
     default:
         break;
@@ -139,10 +144,18 @@ void CBusCanInterface::computeData(quint32 id, QByteArray payload)
     switch(id)
     {
     case StreamingMode:
-        m_streamingMode = payload.toInt();
+        if (payload.length() == 1)
+        {
+            m_streamingMode = payload[0];
+        }
         break;
     case CANRXSpeed:
-        m_serverRXSpeed = payload.toInt();
+        if (payload.length() == 4)
+        {
+            QByteArray dataArray;
+            QDataStream str(payload);
+            str >> m_serverRXSpeed;
+        }
         break;
     default:
         break;

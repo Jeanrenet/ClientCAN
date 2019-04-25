@@ -60,7 +60,7 @@ private:
     QCanBusDevice       *mp_canDevice{nullptr};
     QStringList         m_devicesList;
     bool                m_streamingMode{false};
-    qint32              m_serverRXSpeed;
+    qint32              m_serverRXSpeed{0};
 };
 
 #endif // CBUSCANINTERFACE_H

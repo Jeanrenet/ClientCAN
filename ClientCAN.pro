@@ -18,7 +18,7 @@ SOURCES += \
 
 RESOURCES += qml.qrc
 
-LIBS+= -L$$PWD/ -PCANBasic
+LIBS+= -L$$PWD -PCANBasic
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
