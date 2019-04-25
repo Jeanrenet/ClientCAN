@@ -161,7 +161,7 @@ void CBusCanInterface::computeData(quint32 id, QByteArray payload)
         break;
     }
 
-    Q_EMIT dataReceived();
+    Q_EMIT dataReceived(); // émission du signal de modifications
 }
 
 void CBusCanInterface::framesWritten()

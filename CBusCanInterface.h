@@ -29,7 +29,7 @@ public:
 
 public:
     Q_INVOKABLE bool init(const QString &a_pluginType, const QString &a_interface);
-    Q_INVOKABLE void sendFrame(const QCanBusFrame &frame) const;
+    Q_INVOKABLE
     Q_INVOKABLE void discoverPeakDevices();
 
     Q_INVOKABLE void setLedBlue(bool value);
@@ -55,6 +55,7 @@ protected:
         sendFrame(frame);
     }
 
+    void sendFrame(const QCanBusFrame &frame) const;
     void computeData(quint32 id, QByteArray payload);
 private:
     QCanBusDevice       *mp_canDevice{nullptr};

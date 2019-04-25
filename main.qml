@@ -35,7 +35,7 @@ Window {
                 }
             }
             StatusIndicator {
-                active: connected
+                active: connected //dépend du retour de la fonction init(...)
                 color: "green"
             }
         }
